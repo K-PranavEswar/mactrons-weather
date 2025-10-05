@@ -25,8 +25,7 @@ const backgrounds = {
 };
 
 // ----- MAP STYLE (kept same as you had) -----
-const mapStyles = [ /* same mapStyles content omitted for brevity */ ];
-mapStyles.splice(0, mapStyles.length,
+const mapStyles = [
   { "elementType": "geometry", "stylers": [ { "color": "#1d2c4d" } ] },
   { "elementType": "labels.text.fill", "stylers": [ { "color": "#8ec3b9" } ] },
   { "elementType": "labels.text.stroke", "stylers": [ { "color": "#1a3646" } ] },
@@ -53,11 +52,14 @@ mapStyles.splice(0, mapStyles.length,
   { "featureType": "transit.station", "elementType": "geometry", "stylers": [ { "color": "#3a4762" } ] },
   { "featureType": "water", "elementType": "geometry", "stylers": [ { "color": "#0e1626" } ] },
   { "featureType": "water", "elementType": "labels.text.fill", "stylers": [ { "color": "#4e6d70" } ] }
-);
+];
 
 // ----- HELPERS & SMALL COMPONENTS -----
 const getUvIndexCategory = (uvIndex) => { if (uvIndex <= 2) return "Low"; if (uvIndex <= 5) return "Moderate"; if (uvIndex <= 7) return "High"; if (uvIndex <= 10) return "Very High"; return "Extreme"; };
 const getAqiCategory = (aqi) => { if (aqi <= 50) return { category: "Good", color: "#4ade80" }; if (aqi <= 100) return { category: "Moderate", color: "#facc15" }; if (aqi <= 150) return { category: "Sensitive", color: "#fb923c" }; if (aqi <= 200) return { category: "Unhealthy", color: "#f87171" }; if (aqi <= 300) return { category: "Very Unhealthy", color: "#c026d3" }; return { category: "Hazardous", color: "#701a75" }; };
+const generateMockData = (base, variation, count) => {
+  return Array.from({ length: count }, (_, i) => base + (Math.random() - 0.5) * variation * (i + 1));
+};
 
 const WeatherIcon = ({ condition, ...props }) => {
   switch ((condition || '').toLowerCase()) {
@@ -71,15 +73,28 @@ const WeatherIcon = ({ condition, ...props }) => {
   }
 };
 
-const HighlightCard = ({ title, icon, children }) => (
-  <div className="highlight-card">
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-      {icon && <div style={{ opacity: 0.95 }}>{icon}</div>}
-      <h3 className="card-title" style={{ margin: 0 }}>{title}</h3>
+const HighlightCard = ({ title, icon, children, popupContent }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <div
+      className="highlight-card"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{ position: 'relative' }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {icon && <div style={{ opacity: 0.95 }}>{icon}</div>}
+        <h3 className="card-title" style={{ margin: 0 }}>{title}</h3>
+      </div>
+      <div className="card-content">{children}</div>
+      {isHovered && popupContent && (
+        <div className="highlight-popup">
+          {popupContent}
+        </div>
+      )}
     </div>
-    <div className="card-content">{children}</div>
-  </div>
-);
+  );
+};
 
 // Simple polyline area chart
 const LineChart = ({ data = [], width = 100, height = 40, color = 'var(--accent-color)' }) => {
@@ -101,6 +116,41 @@ const LineChart = ({ data = [], width = 100, height = 40, color = 'var(--accent-
       <polyline fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" points={points} />
       <polygon fill={`url(#grad-${id})`} points={area} />
     </svg>
+  );
+};
+
+const GraphPopup = ({ title, data, unit, color }) => {
+  // Add a check to ensure data is not empty and the last element is a number
+  const lastValue = data && data.length > 0 && typeof data[data.length - 1] === 'number'
+    ? data[data.length - 1]
+    : 0; // Provide a default value if data is invalid
+
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <h4 style={{ margin: '0 0 0.5rem', fontSize: '1rem', color: 'var(--text-muted-color)' }}>
+        {title}
+      </h4>
+      <LineChart data={data} width={150} height={60} color={color} />
+      <div style={{ fontSize: '1.25rem', fontWeight: 'bold', marginTop: '0.5rem' }}>
+        {lastValue.toFixed(1)} {unit}
+      </div>
+    </div>
+  );
+};
+
+const FeelsLikeEmoji = ({ value }) => {
+  let emoji = '😐';
+  let text = 'Feels Like';
+  if (value >= 30) { emoji = '🥵'; text = 'Very Hot'; }
+  else if (value >= 20) { emoji = '😊'; text = 'Pleasant'; }
+  else if (value >= 10) { emoji = '🙂'; text = 'Cool'; }
+  else if (value >= 0) { emoji = '🥶'; text = 'Cold'; }
+  else { emoji = '🧊'; text = 'Freezing'; }
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <div style={{ fontSize: '3rem' }}>{emoji}</div>
+      <div style={{ color: 'var(--text-muted-color)' }}>{text}</div>
+    </div>
   );
 };
 
@@ -308,7 +358,8 @@ function Home({ location = 'Thiruvananthapuram', onLocationChange = () => {} }) 
         * { box-sizing: border-box; }
         body { margin: 0; font-family: 'Inter', sans-serif; color: var(--text-color); }
         .card { position: relative; overflow: hidden; background-color: var(--card-bg-color); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.5rem; display:flex; flex-direction: column; }
-        .highlight-card { background-color: rgba(30,41,59,0.7); padding: 1rem; border-radius: 1rem; display:flex; flex-direction: column; gap: 0.5rem; }
+        .highlight-card { position: relative; background-color: rgba(30,41,59,0.7); padding: 1rem; border-radius: 1rem; display:flex; flex-direction: column; gap: 0.5rem; }
+        .highlight-popup { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background-color: rgba(30, 41, 59, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; padding: 1rem; z-index: 10; margin-top: 1rem; white-space: nowrap; }
         .background-container { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; background-color:#0f172a; }
         .background-video { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition: opacity 1s ease-in-out; }
         .background-video.fade-out { opacity:0; }
@@ -461,7 +512,7 @@ function Home({ location = 'Thiruvananthapuram', onLocationChange = () => {} }) 
                   <h2 className="card-header">Hourly Forecast</h2>
                   <div className="hourly-wrapper">
                     <button className="scroll-arrow left" onMouseEnter={() => startScrolling(-1)} onMouseLeave={stopScrolling} aria-label="Scroll Left">
-                        <ChevronLeft size={20} />
+                      <ChevronLeft size={20} />
                     </button>
                     <div ref={hourlyScrollRef} className="hourly-scroll-container">
                       <div className="hourly-list">
@@ -469,7 +520,7 @@ function Home({ location = 'Thiruvananthapuram', onLocationChange = () => {} }) 
                       </div>
                     </div>
                     <button className="scroll-arrow right" onMouseEnter={() => startScrolling(1)} onMouseLeave={stopScrolling} aria-label="Scroll Right">
-                        <ChevronRight size={20} />
+                      <ChevronRight size={20} />
                     </button>
                   </div>
                 </div>
@@ -515,11 +566,21 @@ function Home({ location = 'Thiruvananthapuram', onLocationChange = () => {} }) 
                     <AqiGauge value={todayHighlight.aqi} />
                   </HighlightCard>
 
-                  <HighlightCard title="Wind Status" icon={<Wind size={18} />}>
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '1.25rem', fontWeight: 700 }}>{todayHighlight.windStatus}</div>
-                      <div style={{ marginTop: 8 }}><LineChart data={todayHighlight.windHistory || [1,2,3,2,4]} width={100} height={40} /></div>
-                      <div style={{ color: 'var(--text-muted-color)', marginTop: 6 }}>km/h</div>
+                  <HighlightCard
+                    title="Wind Status"
+                    icon={<Wind size={18} />}
+                    popupContent={
+                      <GraphPopup
+                        title="Wind Speed History"
+                        data={todayHighlight.windHistory || generateMockData(todayHighlight.windStatus, 0.5, 10)}
+                        unit="km/h"
+                        color="#00D1FF"
+                      />
+                    }
+                  >
+                    <div className="highlight-text-center">
+                      <div className="highlight-value">{todayHighlight.windStatus}</div>
+                      <div style={{ color: 'var(--text-muted-color)' }}>km/h</div>
                     </div>
                   </HighlightCard>
 
@@ -527,16 +588,51 @@ function Home({ location = 'Thiruvananthapuram', onLocationChange = () => {} }) 
                     <SunriseSunset sunrise={todayHighlight.sunrise} sunset={todayHighlight.sunset} />
                   </HighlightCard>
 
-                  <HighlightCard title="Humidity" icon={<Droplet size={18} />}>
-                    <div className="highlight-text-center"><div className="highlight-value">{todayHighlight.humidity}</div><div style={{ color: 'var(--text-muted-color)' }}>%</div></div>
+                  <HighlightCard
+                    title="Humidity"
+                    icon={<Droplet size={18} />}
+                    popupContent={
+                      <GraphPopup
+                        title="Humidity Trend"
+                        data={generateMockData(todayHighlight.humidity, 2, 10)}
+                        unit="%"
+                        color="#facc15"
+                      />
+                    }
+                  >
+                    <div className="highlight-text-center">
+                      <div className="highlight-value">{todayHighlight.humidity}</div>
+                      <div style={{ color: 'var(--text-muted-color)' }}>%</div>
+                    </div>
                   </HighlightCard>
 
-                  <HighlightCard title="Visibility" icon={<MapPin size={18} />}>
-                    <div className="highlight-text-center"><div className="highlight-value">{todayHighlight.visibility}</div><div style={{ color: 'var(--text-muted-color)' }}>km</div></div>
+                  <HighlightCard
+                    title="Visibility"
+                    icon={<MapPin size={18} />}
+                    popupContent={
+                      <GraphPopup
+                        title="Visibility Trend"
+                        data={generateMockData(todayHighlight.visibility, 0.5, 10)}
+                        unit="km"
+                        color="#4ade80"
+                      />
+                    }
+                  >
+                    <div className="highlight-text-center">
+                      <div className="highlight-value">{todayHighlight.visibility}</div>
+                      <div style={{ color: 'var(--text-muted-color)' }}>km</div>
+                    </div>
                   </HighlightCard>
 
-                  <HighlightCard title="Feels Like" icon={<SunMedium size={18} />}>
-                    <div className="highlight-text-center"><div className="highlight-value">{todayHighlight.feelsLike}</div><div style={{ color: 'var(--text-muted-color)' }}>°C</div></div>
+                  <HighlightCard
+                    title="Feels Like"
+                    icon={<SunMedium size={18} />}
+                    popupContent={<FeelsLikeEmoji value={todayHighlight.feelsLike} />}
+                  >
+                    <div className="highlight-text-center">
+                      <div className="highlight-value">{todayHighlight.feelsLike}</div>
+                      <div style={{ color: 'var(--text-muted-color)' }}>°C</div>
+                    </div>
                   </HighlightCard>
 
                   <div className="highlight-card logo-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -569,7 +665,7 @@ function Home({ location = 'Thiruvananthapuram', onLocationChange = () => {} }) 
 
                             {infoOpen && mapMarker && (
                               <InfoWindow position={{ lat: mapMarker.lat, lng: mapMarker.lng }} onCloseClick={() => setInfoOpen(false)} options={{ pixelOffset: new window.google.maps.Size(0, -30) }}>
-                                <div style={{ color: 'black' }}> {/* InfoWindow has a default white bg */}
+                                <div style={{ color: 'black' }}>
                                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                                     <WeatherIcon condition={mapMarker.condition} size={24} />
                                     <div>
