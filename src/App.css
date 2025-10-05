@@ -36,3 +36,33 @@
     transform: rotate(360deg);
   }
 }
+.app {
+  display: flex;
+  height: 100vh;
+  background-color: #f3f6fa;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.page {
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 40px;
+}
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+  .sidebar {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+  }
+  .main-content {
+    padding: 10px;
+  }
+}

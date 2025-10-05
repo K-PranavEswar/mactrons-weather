@@ -1,0 +1,77 @@
+:root {
+    --card-bg-color: rgba(15, 23, 42, 0.7);
+    --accent-color: #00D1FF;
+    --text-color: #e2e8f0;
+    --text-muted-color: #94a3b8;
+}
+
+.settings-container {
+    padding: 2rem;
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.settings-container h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.setting-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.setting-item label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.setting-item input,
+.setting-item select {
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--text-muted-color);
+    background-color: #1e293b;
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.setting-item input:focus,
+.setting-item select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(0, 209, 255, 0.5);
+}
+
+.setting-item h3 {
+    margin-top: 2rem;
+    font-size: 1.5rem;
+}
+
+.setting-item p {
+    font-size: 0.9rem;
+    color: var(--text-muted-color);
+    line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+    .setting-item {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .setting-item label {
+        width: 220px;
+        margin-bottom: 0;
+    }
+
+    .setting-item input,
+    .setting-item select {
+        flex: 1;
+    }
+}
