@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    SunMedium, LayoutDashboard, Map, Settings, Bell, User,
+    SunMedium, LayoutDashboard, Map, Settings, MessageSquare,
     Edit2, Plus, X, CheckCircle
 } from 'lucide-react';
 
@@ -11,11 +11,15 @@ const backgrounds = {
 };
 
 // --- Reusable Components for Profile Page ---
-const NavItem = ({ icon }) => (
+const NavItem = ({ icon, text, to }) => (
     <li className="nav-item">
-        <div className="nav-icon">{icon}</div>
+        <Link to={to} className="nav-link">
+            <div className="nav-icon">{icon}</div>
+            <span className="nav-text">{text}</span>
+        </Link>
     </li>
 );
+
 
 const ProfileContainer = ({ title, children }) => (
     <div className="profile-container card">
@@ -29,10 +33,9 @@ const ProfileContainer = ({ title, children }) => (
 // --- Main Profile Page Component ---
 function ProfilePage() {
     // --- State Management for Profile Settings ---
-    
-    // --- CHANGED: Initialize userName state from localStorage ---
     const [userName, setUserName] = useState(() => {
-        return localStorage.getItem('userProfileName') || 'Alex Mercer';
+        // --- MODIFIED: Changed default username to 'MACTRONS' ---
+        return localStorage.getItem('userProfileName') || 'MACTRONS';
     });
     
     const [userPhoto, setUserPhoto] = useState(() => {
@@ -58,7 +61,6 @@ function ProfilePage() {
         }
     };
 
-    // --- NEW: Handler for name changes to save to localStorage ---
     const handleNameChange = (event) => {
         const newName = event.target.value;
         setUserName(newName);
@@ -77,43 +79,56 @@ function ProfilePage() {
     };
 
     const handleSaveChanges = () => {
-        // This button can now be used for other settings or as a visual confirmation
         console.log('Saving profile data:', { userName, userPhoto, savedLocations });
         setSaveStatus('Profile updated successfully!');
-        setTimeout(() => setSaveStatus(''), 3000); // Hide message after 3 seconds
+        setTimeout(() => setSaveStatus(''), 3000);
     };
 
     return (
         <>
             <style>{`
-                /* Styles remain the same */
                 :root { --card-bg-color: rgba(15, 23, 42, 0.7); --accent-color: #00D1FF; --text-color: #e2e8f0; --text-muted-color: #94a3b8;}
                 .background-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-color: #0f172a; }
                 .background-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
                 .weather-dashboard { position: relative; z-index: 1; background-color: rgba(0,0,0,0.2); min-height: 100vh; width: 100%; color: var(--text-color); font-family: 'Inter', sans-serif; display: flex; box-sizing: border-box; }
-                .sidebar-nav { flex-shrink: 0; background-color: var(--card-bg-color); backdrop-filter: blur(20px); border-radius: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: space-between; margin: 1rem; padding: 1.5rem 1rem; z-index: 20; border: 1px solid rgba(255, 255, 255, 0.1); }
-                .sidebar-nav a { text-decoration: none; color: inherit; }
-                .nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2rem; }
-                .nav-item { position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-                .nav-icon { color: var(--text-muted-color); transition: all 0.3s ease; }
-                .nav-item:hover .nav-icon { color: white; }
+                
+                /* --- SIDEBAR STYLES (ADDED & MODIFIED) --- */
+                .sidebar-nav { width: 250px; flex-shrink: 0; background-color: var(--card-bg-color); backdrop-filter: blur(20px); display: flex; flex-direction: column; justify-content: space-between; margin: 1rem; padding: 1.5rem; z-index: 20; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
+                .sidebar-top { display: flex; flex-direction: column; gap: 2rem; }
+                .logo-container { display: flex; align-items: center; gap: 0.75rem; color: white; padding-left: 0.5rem; font-size: 1.25rem; font-weight: 600; }
+                .nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.5rem; }
+                .nav-item { position: relative; }
+                .nav-link { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.75rem; text-decoration: none; color: var(--text-muted-color); transition: all 0.3s ease; }
+                .nav-link:hover, .nav-link.active { background-color: rgba(0, 209, 255, 0.1); color: white; }
+                .nav-icon { display: flex; align-items: center; justify-content: center; }
+                .sidebar-profile { display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-radius: 0.75rem; background-color: rgba(0,0,0,0.2); }
+                .sidebar-profile-photo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-color); }
+                .sidebar-profile-info { display: flex; flex-direction: column; }
+                .sidebar-username { color: white; font-weight: 500; font-size: 0.9rem; }
+                .sidebar-status { color: #4ade80; font-size: 0.75rem; }
+                /* --- END SIDEBAR STYLES --- */
+
                 .card { position: relative; overflow: hidden; background-color: var(--card-bg-color); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
                 .card::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-image: radial-gradient(circle at 25% 25%, rgba(0, 209, 255, 0.1), transparent 40%), radial-gradient(circle at 75% 75%, rgba(192, 0, 255, 0.1), transparent 40%); animation: aurora 10s linear infinite; z-index: -1; }
                 @keyframes aurora { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                
                 .profile-content-wrapper { flex: 1; padding: 2rem; overflow-y: auto; }
                 .profile-header { text-align: center; font-size: 2.5rem; font-weight: 700; margin-bottom: 3rem; }
                 .profile-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: 800px; margin: 0 auto; }
                 .profile-container { padding: 2rem; }
                 .container-title { font-size: 1.5rem; font-weight: 600; margin: 0 0 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; }
                 .container-content { display: flex; flex-direction: column; gap: 2rem; }
-                .profile-details { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+                
+                /* --- MODIFIED: Styles for Centered Profile --- */
+                .profile-details { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
                 .photo-uploader { position: relative; }
-                .profile-photo { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-color); }
                 .photo-edit-btn { position: absolute; bottom: 5px; right: 5px; background-color: var(--accent-color); color: #0f172a; border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s ease; }
                 .photo-edit-btn:hover { transform: scale(1.1); }
-                .profile-info { flex: 1; display: flex; flex-direction: column; gap: 1rem; min-width: 250px; }
-                .input-group { display: flex; flex-direction: column; }
-                .input-label { color: var(--text-muted-color); margin-bottom: 0.5rem; font-size: 0.9rem; }
+                .profile-info { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 350px; }
+                .input-group { display: flex; flex-direction: column; width: 100%; }
+                .input-label { color: var(--text-muted-color); margin-bottom: 0.5rem; font-size: 0.9rem; text-align: center; }
+                /* --- END MODIFICATIONS --- */
+                
                 .text-input { background-color: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: var(--text-color); padding: 0.75rem 1rem; font-size: 1rem; }
                 .text-input:focus { outline: none; border-color: var(--accent-color); }
                 .location-list { display: flex; flex-direction: column; gap: 1rem; }
@@ -135,19 +150,6 @@ function ProfilePage() {
             </div>
 
             <div className="weather-dashboard">
-                <nav className="sidebar-nav">
-                    <div>
-                        <ul className="nav-list">
-                            <Link to="/"><NavItem icon={<LayoutDashboard size={24} />} /></Link>
-                            <Link to="/map"><NavItem icon={<Map size={24} />} /></Link>
-                            <Link to="/settings"><NavItem icon={<Settings size={24} />} /></Link>
-                        </ul>
-                    </div>
-                    <div>
-                        <Link to="/profile"><NavItem icon={<User size={24} />} /></Link>
-                    </div>
-                </nav>
-
                 <main className="profile-content-wrapper">
                     <h1 className="profile-header">Profile & Locations</h1>
                     <div className="profile-grid">
@@ -174,7 +176,7 @@ function ProfilePage() {
                                             type="text" 
                                             className="text-input" 
                                             value={userName} 
-                                            onChange={handleNameChange} // --- CHANGED
+                                            onChange={handleNameChange}
                                         />
                                     </div>
                                 </div>
@@ -182,7 +184,6 @@ function ProfilePage() {
                         </ProfileContainer>
 
                         <ProfileContainer title="Saved Locations">
-                           {/* ... code for saved locations remains the same ... */}
                            <div className="location-list">
                                 {savedLocations.map(loc => (
                                     <div key={loc} className="location-item">

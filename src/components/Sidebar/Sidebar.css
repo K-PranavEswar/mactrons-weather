@@ -1,172 +1,180 @@
+:root {
+  --sidebar-bg-color: rgba(15, 23, 42, 0.6);
+  --sidebar-border-color: rgba(51, 65, 85, 0.5);
+  --sidebar-text-primary: #f8fafc;
+  --sidebar-text-secondary: #94a3b8;
+  --sidebar-accent-color: #38bdf8;
+  --sidebar-hover-bg: rgba(51, 65, 85, 0.4);
+  --sidebar-collapsed-width: 80px;
+  --sidebar-expanded-width: 250px;
+  --sidebar-transition-speed: 0.3s;
+}
+
 .sidebar {
-  width: 230px;
-  background: #0a3d62;
-  color: white;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.logo {
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  color: white;
-  text-decoration: none;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  transition: background 0.3s;
-}
-
-.nav-link:hover, .nav-link.active {
-  background: #1e6091;
-}
-.sidebar-nav {
-  position: fixed;
-  top: 20px;
-  left: -11px;
-  display: flex;
-  flex-direction: column;
-  gap: 70px;
-  z-index: 40;
-}
-
-.nav-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.nav-item .nav-icon {
-  color: #888; /* default color */
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.nav-item.active .nav-icon {
-  color: #ff4c60; /* accent color */
-  transform: translateY(5px); /* hover-down effect */
-}
-
-/* Optional: hover effect even when not active */
-.nav-item:hover .nav-icon {
-  color: #ff6b81;
-  transform: translateY(3px);
-}
-
-/* Mobile responsiveness */
-@media (max-width: 900px) {
-  .sidebar-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 10px 0;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  .nav-item .nav-icon {
-    transform: none; /* reset hover down for mobile */
-  }
-
-  .nav-item.active .nav-icon {
-    transform: translateY(-2px);
-  }
-}
-.sidebar-nav {
   position: fixed;
   top: 0;
-  right:0;
-  width: 55px;
-  height: 85vh;
-  background-color: #111; /* dark sidebar */
+  left: 0;
+  height: 100vh;
+  width: var(--sidebar-collapsed-width);
+  background-color: var(--sidebar-bg-color);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-right: 1px solid var(--sidebar-border-color);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 40px;
-  z-index: 999;
+  padding: 1.5rem 0;
+  transition: width var(--sidebar-transition-speed) ease-in-out;
+  z-index: 1000;
+  overflow: hidden;
 }
 
-.nav-list {
+.sidebar.expanded {
+  width: var(--sidebar-expanded-width);
+  align-items: flex-start;
+}
+
+/* Header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 1.75rem;
+  box-sizing: border-box;
+  margin-bottom: 2rem;
+  color: var(--sidebar-accent-color);
+}
+
+.sidebar.expanded .sidebar-header {
+  justify-content: flex-start;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-left: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--sidebar-transition-speed) ease;
+  transition-delay: 0.1s;
+}
+
+.sidebar.expanded .sidebar-title {
+  opacity: 1;
+}
+
+/* Menu */
+.sidebar-menu {
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%;
+  flex-grow: 1; /* This will now push the profile to the bottom of the list */
 }
 
-.nav-item {
-  margin: 20px 0;
+.menu-item {
+  width: 100%;
 }
 
-.nav-item.active .nav-icon {
-  color: #1e90ff; /* highlight active section */
-}
-
-.nav-link {
-  color: #fff;
-  text-decoration: none;
+.menu-link {
   display: flex;
-  justify-content: center;
   align-items: center;
+  padding: 1rem 1.75rem;
+  text-decoration: none;
+  color: var(--sidebar-text-secondary);
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow: hidden;
 }
 
-.nav-icon {
-  cursor: pointer;
-  transition: transform 0.3s ease, color 0.3s ease;
+.menu-link:hover {
+  background-color: var(--sidebar-hover-bg);
+  color: var(--sidebar-text-primary);
 }
 
-.nav-item:hover .nav-icon {
-  transform: translateY(3px); /* slight hover effect */
-  color: #00bfff;
-}
-/* Sidebar.css or equivalent file */
-
-/* Ensure the list item is a relative container for the absolute tooltip */
-.nav-item.has-tooltip {
-    position: relative;
-    display: flex;
-    justify-content: center;
+.menu-item.active .menu-link {
+  color: var(--sidebar-accent-color);
+  font-weight: 500;
 }
 
-/* Style for the tooltip text */
-.tooltip-text {
-    visibility: hidden; /* Hidden by default */
-    background-color: #555; /* Dark background */
-    color: #fff; /* White text */
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 10px;
-    
-    /* Positioning it next to the icon */
-    position: absolute;
-    z-index: 1;
-    left: calc(100% + 10px); /* Position 10px to the right of the item */
-    top: 50%;
-    transform: translateY(-50%);
-    
-    /* Tooltip arrow/triangle styling (optional) */
-    white-space: nowrap; /* Prevent line breaks */
-    opacity: 0;
-    transition: opacity 0.3s;
+.menu-item.active .menu-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60%;
+  width: 4px;
+  background-color: var(--sidebar-accent-color);
+  border-radius: 0 4px 4px 0;
 }
 
-/* Show the tooltip when hovering over the list item */
-.nav-item.has-tooltip:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
+.menu-icon {
+  flex-shrink: 0;
+}
+
+.menu-label {
+  margin-left: 1rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--sidebar-transition-speed) ease;
+  transition-delay: 0.1s;
+}
+
+.sidebar.expanded .menu-label {
+  opacity: 1;
+}
+
+/* --- MODIFICATION: The .sidebar-footer class is no longer needed --- */
+
+/* Profile link styling */
+.profile-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--sidebar-text-primary);
+  /* Adjusted padding to match other menu items */
+  padding: 0.75rem 1.75rem; 
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.profile-link:hover {
+  background-color: var(--sidebar-hover-bg);
+}
+
+.profile-photo {
+  width: 32px; /* Adjusted size to better fit as a menu item */
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--sidebar-accent-color);
+}
+
+.profile-details {
+  margin-left: 1rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--sidebar-transition-speed) ease;
+  transition-delay: 0.1s;
+}
+
+.sidebar.expanded .profile-details {
+  opacity: 1;
+}
+
+.profile-name {
+  display: block;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.profile-status {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--sidebar-text-secondary);
 }

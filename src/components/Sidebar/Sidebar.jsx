@@ -1,66 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Map, Settings, User, MessageCircle } from 'lucide-react'; // Import MessageCircle
+import { LayoutDashboard, Map, Settings, MessageCircle, Sun } from 'lucide-react';
+import './Sidebar.css'; 
+
+import userAvatar from '../../assets/team.png'; 
 
 const Sidebar = () => {
-  // --- Start: Configuration Update ---
-  const sections = [
-    { name: 'dashboard', path: '/' },
-    { name: 'map', path: '/map' },
-    { name: 'settings', path: '/settings' },
-    { name: 'profile', path: '/profile' },
-    { name: 'chatbot', path: '/chatbot' }, // Added Chatbot section
-  ];
-
-  const iconMap = {
-    dashboard: LayoutDashboard,
-    map: Map,
-    settings: Settings,
-    profile: User,
-    chatbot: MessageCircle, // Map the new icon
-  };
-  // --- End: Configuration Update ---
-
+  const [isExpanded, setIsExpanded] = useState(false);
   const location = useLocation();
 
-  // Placeholder for dynamic username (replace 'there' with actual user state)
-  const username = 'there';
-  const tooltipMessage = `Hi ${username}, What kind of help do you need?`;
+  const navItems = [
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
+    { icon: Map, label: 'Map', path: '/map' },
+    { icon: MessageCircle, label: 'Chatbot', path: '/chatbot' },
+    { icon: Settings, label: 'Settings', path: '/settings' },
+  ];
+
+  const user = {
+    name: 'MACTRONS',
+    photo: userAvatar 
+  };
 
   return (
-    <nav className="sidebar-nav">
-      <ul className="nav-list">
-        {sections.map((section) => {
-          const Icon = iconMap[section.name];
-          const isActive = location.pathname === section.path;
-          const isChatbot = section.name === 'chatbot';
+    <nav 
+      className={`sidebar ${isExpanded ? 'expanded' : ''}`}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+    >
+      <div className="sidebar-header">
+        <Sun className="sidebar-logo" size={32} />
+        <span className="sidebar-title">MACTRONS</span>
+      </div>
 
+      <ul className="sidebar-menu">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
           return (
-            <li
-              key={section.name}
-              className={`nav-item ${isActive ? 'active' : ''} ${isChatbot ? 'has-tooltip' : ''}`} // Add has-tooltip class for CSS
-            >
-              <Link to={section.path} className="nav-link">
-                <Icon
-                  className="nav-icon"
-                  size={24}
-                  style={{
-                    transform: isActive ? 'translateY(5px)' : 'translateY(0)',
-                    transition: 'transform 0.3s ease',
-                  }}
-                />
+            <li key={item.label} className={`menu-item ${isActive ? 'active' : ''}`}>
+              <Link to={item.path} className="menu-link" title={isExpanded ? '' : item.label}>
+                <item.icon className="menu-icon" size={24} />
+                <span className="menu-label">{item.label}</span>
               </Link>
-              {/* --- Start: Tooltip Logic --- */}
-              {isChatbot && (
-                <span className="tooltip-text">
-                  {tooltipMessage}
-                </span>
-              )}
-              {/* --- End: Tooltip Logic --- */}
             </li>
           );
         })}
+
+        {/* --- MODIFICATION: Profile link moved into the menu list --- */}
+        <li className="menu-item">
+            <Link to="/profile" className="profile-link">
+              <img src={user.photo} alt="User" className="profile-photo" />
+              <div className="profile-details">
+                <span className="profile-name">{user.name}</span>
+                <span className="profile-status">Online</span>
+              </div>
+            </Link>
+        </li>
       </ul>
+
+      {/* The sidebar-footer div has been removed */}
     </nav>
   );
 };

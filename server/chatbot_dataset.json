@@ -1,0 +1,248 @@
+[
+  {
+    "intent": "greeting",
+    "question": "Hi",
+    "answer": "Hello! 👋 I'm ParadeWatch. I can help you find the perfect weather for your event. To get started, what kind of event are you planning?"
+  },
+  {
+    "intent": "greeting",
+    "question": "Hello",
+    "answer": "Hi there! I'm ParadeWatch. Let's plan something amazing. What's the occasion?"
+  },
+  {
+    "intent": "greeting",
+    "question": "Hey",
+    "answer": "Hey! I'm ready to help you plan. What sort of event do you have in mind?"
+  },
+  {
+    "intent": "capability_inquiry",
+    "question": "What can you do?",
+    "answer": "I find the best dates, times, and locations for events by analyzing weather forecasts. My goal is to make sure your special day has perfect weather! What are you planning?"
+  },
+  {
+    "intent": "capability_inquiry",
+    "question": "How do you work?",
+    "answer": "You tell me the event you're planning and the location, and I'll check the weather forecasts to suggest the best possible time for you. What kind of event should we start with?"
+  },
+  {
+    "intent": "start_planning_event_type",
+    "question": "I want to plan a party",
+    "answer": "A party sounds like a lot of fun! To find the best weather for it, could you tell me which city the party will be in?"
+  },
+  {
+    "intent": "start_planning_event_type",
+    "question": "Help me organize a picnic",
+    "answer": "A picnic is a wonderful idea! Weather is key. In which city are you planning to have it?"
+  },
+  {
+    "intent": "start_planning_event_type",
+    "question": "I'm planning a wedding",
+    "answer": "A wedding! How exciting, congratulations! We'll need to find the perfect day. In which city will the wedding take place?"
+  },
+  {
+    "intent": "start_planning_event_type",
+    "question": "Plan an outdoor concert",
+    "answer": "An outdoor concert, fantastic! To make sure it doesn't get rained out, which city are you planning it for?"
+  },
+  {
+    "intent": "provide_location",
+    "question": "The location is Mumbai",
+    "answer": "Great, Mumbai it is! Now that I know the location, do you have a specific date in mind, or would you like me to find the best day for your [event_type] based on the weather forecast?"
+  },
+  {
+    "intent": "provide_location",
+    "question": "It's in Delhi",
+    "answer": "Delhi, noted. Do you have a preferred date for your [event_type], or shall I look for a day with the best weather?"
+  },
+  {
+    "intent": "provide_location",
+    "question": "We are thinking of Goa",
+    "answer": "Goa is a beautiful choice for a [event_type]! Should I look for the best weather window for you, or do you have a date you're considering?"
+  },
+  {
+    "intent": "request_date_suggestion",
+    "question": "Suggest a good day for me",
+    "answer": "Of course. Let me analyze the forecast for [location]... It looks like [suggested_date] will be a beautiful day with clear skies and a temperature around [temperature]°C. Does that sound good for you?"
+  },
+  {
+    "intent": "request_date_suggestion",
+    "question": "Find the best day",
+    "answer": "I'm on it. Checking the upcoming weather for [location]... My recommendation is [suggested_date]. The forecast is showing [weather_condition], which should be perfect for a [event_type]. How does that sound?"
+  },
+  {
+    "intent": "ask_specific_date",
+    "question": "What about next weekend?",
+    "answer": "Let me check the forecast for next weekend in [location]. For Saturday, it looks like [saturday_weather]. Sunday is showing [sunday_weather]. Does either of those work for your [event_type]?"
+  },
+  {
+    "intent": "ask_specific_date",
+    "question": "Is October 25th a good day?",
+    "answer": "Checking the weather for Saturday, October 25th, 2025 in [location]... It looks like it will be [weather_condition] with a low chance of rain. The temperature will be around [temperature]°C. Would this be suitable?"
+  },
+    {
+    "intent": "ask_specific_date",
+    "question": "How about Friday?",
+    "answer": "This coming Friday in [location], the forecast shows [weather_condition] with a high of [temperature]°C. Is that suitable for your [event_type]?"
+  },
+  {
+    "intent": "request_time_suggestion",
+    "question": "What time is best?",
+    "answer": "Good question. On [date], the sun will be less intense and the lighting will be beautiful in the late afternoon, around [suggested_time]. Would that be a good time for your guests?"
+  },
+  {
+    "intent": "request_time_suggestion",
+    "question": "Should we do morning or afternoon?",
+    "answer": "Based on the forecast for [location] on [date], the morning will be cooler at [morning_temp]°C, while the afternoon will be warmer at [afternoon_temp]°C. Which do you prefer for your [event_type]?"
+  },
+  {
+    "intent": "weather_inquiry_rain",
+    "question": "Will it rain?",
+    "answer": "Let me check the rain probability for [date] in [location]. The chance of rain is currently forecasted at only [rain_probability]%. It's very unlikely to rain, which is great news!"
+  },
+  {
+    "intent": "weather_inquiry_rain",
+    "question": "Is there any chance of rain?",
+    "answer": "I'm checking the detailed forecast now. For [date], there is a low [rain_probability]% chance of brief showers, but it shouldn't affect your event. Does that sound okay?"
+  },
+  {
+    "intent": "weather_inquiry_general",
+    "question": "How's the weather in Pune?",
+    "answer": "Right now in Pune, the weather is [weather_condition] with a temperature of [temperature]°C. Are you planning an event in Pune?"
+  },
+  {
+    "intent": "weather_inquiry_general",
+    "question": "Tell me the forecast for Bangalore this week",
+    "answer": "Certainly. This week in Bangalore, we're seeing mixed sun and clouds. The best day for an outdoor event appears to be Thursday, with clear skies and a high of 28°C. Can I help you plan something for that day?"
+  },
+  {
+    "intent": "affirmative_confirmation",
+    "question": "Yes, that sounds good",
+    "answer": "Excellent! So we've settled on [date] around [time] for your [event_type] in [location]. Is there anything else you need to finalize the plan?"
+  },
+  {
+    "intent": "affirmative_confirmation",
+    "question": "Perfect",
+    "answer": "Wonderful! I'm glad we found a great time for your event. Do you have any other questions, perhaps about what to wear or other weather details?"
+  },
+  {
+    "intent": "negative_confirmation",
+    "question": "No, that doesn't work",
+    "answer": "No problem at all. Let's find another option. Are you looking for a different day of the week, or perhaps a different time of day?"
+  },
+  {
+    "intent": "negative_confirmation",
+    "question": "Can we try another date?",
+    "answer": "Of course. What other date were you considering? Or I can look for the next best day in the forecast for you."
+  },
+  {
+    "intent": "thanks",
+    "question": "Thanks",
+    "answer": "You're very welcome! I'm here if you have any more questions. Just ask!"
+  },
+  {
+    "intent": "thanks",
+    "question": "Thank you for your help",
+    "answer": "It was my pleasure! I hope you have a fantastic event. Remember to check back a day before for the latest forecast!"
+  },
+  {
+    "intent": "chitchat_name",
+    "question": "What is your name?",
+    "answer": "You can call me ParadeWatch. I'm your friendly, weather-smart event planning assistant."
+  },
+  {
+    "intent": "chitchat_identity",
+    "question": "Are you a robot?",
+    "answer": "I'm an AI assistant designed to help you plan events with the best weather possible! What can we plan next?"
+  },
+  {
+    "intent": "chitchat_joke",
+    "question": "Tell me a joke",
+    "answer": "Why did the cloud break up with the fog? He was too misty-rious! Now, back to planning... have we decided on a location yet?"
+  },
+  {
+    "intent": "end_conversation",
+    "question": "That's all for now",
+    "answer": "Alright! It was a pleasure helping you. If you need anything else, just let me know. Happy planning!"
+  },
+  {
+    "intent": "restart_conversation",
+    "question": "Start over",
+    "answer": "Chat restarted! 🔄 Type 'hi' to start planning a new event from scratch."
+  },
+  {
+    "intent": "restart_conversation",
+    "question": "Reset",
+    "answer": "No problem, let's start fresh. 🔄 How can I help you plan an event?"
+  },
+  {
+    "intent": "end_conversation",
+    "question": "Exit",
+    "answer": "Goodbye! I hope your event is a huge success. Come back any time!"
+  },
+  {
+    "intent": "weather_inquiry_temperature",
+    "question": "How hot will it be?",
+    "answer": "On [date] in [location], the high is expected to be around [max_temp]°C and the low around [min_temp]°C. Do these temperatures work for your planned activities?"
+  },
+  {
+    "intent": "weather_inquiry_wind",
+    "question": "What's the wind speed?",
+    "answer": "The wind is expected to be a gentle breeze, around [wind_speed] km/h. It should be very comfortable for an outdoor gathering. Is this okay?"
+  },
+  {
+    "intent": "inability_to_book",
+    "question": "Okay, book that time",
+    "answer": "I would love to, but I can't book venues or services directly. I've noted down the ideal time for you: [date] at [time] in [location]. I recommend contacting your venue to confirm!"
+  },
+  {
+    "intent": "inability_to_recommend_venue",
+    "question": "Can you recommend a park in Hyderabad?",
+    "answer": "While I can't recommend specific venues, I can tell you that the weather in Hyderabad this Sunday is perfect for a park visit! It will be sunny with a light breeze. Does that help you choose?"
+  },
+  {
+    "intent": "weather_inquiry_humidity",
+    "question": "Is it humid in Kolkata?",
+    "answer": "Yes, the humidity in Kolkata is currently forecasted to be around [humidity]%. For an outdoor event, it would be more comfortable in the morning or evening. Which would you prefer?"
+  },
+  {
+    "intent": "change_parameter_location",
+    "question": "Change location to Jaipur",
+    "answer": "Location updated to Jaipur. Just to confirm, are we still planning a [event_type]?"
+  },
+  {
+    "intent": "clarify_parameter_wedding",
+    "question": "The wedding is in Udaipur next month",
+    "answer": "Udaipur is a stunning choice for a wedding. The weather in November is generally very pleasant there. Do you have a specific date you'd like me to check?"
+  },
+  {
+    "intent": "weather_inquiry_uv",
+    "question": "Tell me about the UV index",
+    "answer": "The UV index for [location] on [date] is expected to be [uv_index], which is considered [uv_category]. It would be a good idea to have sunscreen available for your guests. Is there anything else you'd like to know?"
+  },
+  {
+    "intent": "suggestion_attire",
+    "question": "What should I wear?",
+    "answer": "Based on a temperature of [temperature]°C and [weather_condition] conditions, I'd recommend light, comfortable clothing. If your event is in the evening, a light jacket might be a good idea! Does that help?"
+  },
+  {
+    "intent": "inability_to_book_vendor",
+    "question": "Can you find me a caterer?",
+    "answer": "I'm sorry, my expertise is only in weather forecasting for your event. I can't book services like catering. Once we've picked a date with great weather, you'll be all set to contact your vendors!"
+  },
+  {
+    "intent": "clarify_forecast_accuracy",
+    "question": "Is the forecast accurate?",
+    "answer": "I use up-to-date information from reliable weather services. Forecasts are very reliable, but it's always smart to check back a day or two before your event for the final prediction. Would you like me to set a reminder?"
+  },
+  {
+    "intent": "finalize_plan",
+    "question": "Okay, let's finalize the plan",
+    "answer": "Great! Let me summarize: we have a [event_type] planned for [date] at [time] in [location]. The weather is expected to be [weather_condition] with a temperature of [temperature]°C. Does that all look correct to you?"
+  },
+  {
+    "intent": "finalize_plan_confirmed",
+    "question": "Yes, that's perfect",
+    "answer": "Wonderful! I'm so glad I could help you find the perfect day for your [event_type]. I hope it's a fantastic success!"
+  }
+]
+

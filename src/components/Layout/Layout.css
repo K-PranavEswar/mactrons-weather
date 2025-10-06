@@ -1,0 +1,11 @@
+.app-layout {
+  display: flex;
+}
+
+.page-content {
+  flex-grow: 1;
+  /* The margin from your original App.js is no longer needed 
+     if the sidebar has a fixed width, but this is a robust way */
+  padding-left: 80px; /* Adjust if your sidebar width changes */
+  width: calc(100% - 80px);
+}

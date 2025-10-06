@@ -107,19 +107,6 @@ function SettingsPage() {
             </div>
 
             <div className="weather-dashboard">
-                <nav className="sidebar-nav">
-                    <div>
-                        <ul className="nav-list">
-                            <Link to="/"><NavItem icon={<LayoutDashboard size={24} />} /></Link>
-                            <Link to="/map"><NavItem icon={<Map size={24} />} /></Link>
-                            <Link to="/settings"><NavItem icon={<Settings size={24} />} /></Link>
-                        </ul>
-                    </div>
-                    <div>
-                        <Link to="/profile"><NavItem icon={<User size={24} />} /></Link>
-                    </div>
-                </nav>
-
                 <main className="settings-content-wrapper">
                     <h1 className="settings-header">Settings</h1>
                     <div className="settings-grid">

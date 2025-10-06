@@ -1,89 +1,57 @@
-// App.js
-import React, { useState } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-// Pages
-import Home from './components/Home/Home';
-import ProfilePage from './components/Profile/ProfilePage';
-import MapPage from './components/Map/MapPage'; 
-import SettingsPage from './components/Settings/Settings';
+// Layout Component - This wraps pages to provide a consistent sidebar.
+import Layout from './components/Layout/Layout';
 
-// Sidebar
-import Sidebar from './components/Sidebar/Sidebar';
-import './components/Sidebar/Sidebar.css'; // Sidebar CSS
-import ChatbotPage from './pages/ChatbotPage';
+// --- Lazy Load Page Components ---
+// This improves performance by only loading the code for a page when it's needed.
+const Home = lazy(() => import('./components/Home/Home'));
+const ProfilePage = lazy(() => import('./components/Profile/ProfilePage'));
+const MapPage = lazy(() => import('./components/Map/MapPage'));
+const SettingsPage = lazy(() => import('./components/Settings/Settings'));
+const ChatbotPage = lazy(() => import('./pages/ChatbotPage'));
+
+// --- Loading Fallback Component ---
+// A simple loading message shown while page components are being loaded.
+const LoadingFallback = () => (
+  <div style={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    backgroundColor: '#020617', // Matches modern theme
+    color: '#f8fafc',
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: '1.2rem'
+  }}>
+    <h2>Loading Mactrons Weatherings...</h2>
+  </div>
+);
 
 function App() {
-  // Global state
-  const [location, setLocation] = useState('Thiruvananthapuram');
-  const [userName, setUserName] = useState('Alex Mercer');
-  const [userPhoto, setUserPhoto] = useState(
-    'https://cdn.discordapp.com/attachments/1252909180790968413/1256247963383038084/default-avatar.png?ex=66800720&is=667eb5a0&hm=08412a3271295e8656e185b3068f05e2630a91617013b19124430e38a4d257b8&'
-  );
-  const [savedLocations, setSavedLocations] = useState(['Thiruvananthapuram', 'Mumbai', 'London']);
-
+  // All global state (like user info and location) is now managed by Redux.
+  // This keeps the main App component clean and focused on routing.
   return (
-    <div className="App">
-      {/* Fixed Sidebar */}
-      <Sidebar />
-
-      {/* Page Content */}
-      <div className="page-content" style={{ marginLeft: '80px' }}> {/* leave space for sidebar */}
-        <Routes>
-          {/* Home Page */}
-          <Route 
-            path="/" 
-            element={
-              <Home 
-                location={location} 
-                onLocationChange={setLocation}
-                userName={userName}
-                userPhoto={userPhoto}
-              />
-            } 
-          />
-
-          {/* Profile Page */}
-          <Route 
-            path="/profile" 
-            element={
-              <ProfilePage 
-                userName={userName}
-                userPhoto={userPhoto}
-                savedLocations={savedLocations}
-                onUserNameChange={setUserName}
-                onUserPhotoChange={setUserPhoto}
-                onSavedLocationsChange={setSavedLocations}
-              />
-            }
-          />
-
-          {/* Map Page */}
-          <Route 
-            path="/map" 
-            element={
-              <MapPage 
-                location={location} 
-                onLocationChange={setLocation} 
-              />
-            } 
-          />
-
-          {/* Settings Page */}
-          <Route 
-            path="/settings" 
-            element={
-              <SettingsPage 
-                currentLocation={location} 
-                onLocationChange={setLocation} 
-              />
-            } 
-          />
+    <Suspense fallback={<LoadingFallback />}>
+      <Routes>
+        {/* This is a layout route. All nested routes (<Route path="...">) 
+          will render inside the <Layout /> component, which contains the sidebar.
+        */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/chatbot" element={<ChatbotPage />} />
-        </Routes>
-      </div>
-    </div>
+        </Route>
+        
+        {/* You can add routes here that DON'T need the sidebar, e.g., a login page */}
+        {/* <Route path="/login" element={<LoginPage />} /> */}
+      </Routes>
+    </Suspense>
   );
 }
 
 export default App;
+
