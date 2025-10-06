@@ -1,7 +1,3 @@
-Of course. Here is an updated, more professional, and comprehensive `README.md` for your **Mactrons Weatherings** application, incorporating the features we've worked on, like the backend, user profiles, and chatbot.
-
------
-
 # Mactrons Weatherings 🌦️
 
 [](https://opensource.org/licenses/MIT)
